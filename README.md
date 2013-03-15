@@ -1,15 +1,17 @@
-# Vagrant RackSpace Cloud Provider
+# Vagrant OpenStack Cloud Provider
 
 This is a [Vagrant](http://www.vagrantup.com) 1.1+ plugin that adds a
-[RackSpace Cloud](http://www.rackspace.com/cloud) provider to Vagrant,
-allowing Vagrant to control and provision machines within RackSpace
+[OpenStack Cloud](http://www.openstack.org) provider to Vagrant,
+allowing Vagrant to control and provision machines within an OpenStack
 cloud.
+
+This plugin started as a fork of the Vagrant RackSpace provider.
 
 **Note:** This plugin requires Vagrant 1.1+.
 
 ## Features
 
-* Boot Rackspace Cloud instances.
+* Boot OpenStack Cloud instances.
 * SSH into the instances.
 * Provision the instances with any built-in Vagrant provisioner.
 * Minimal synced folder support via `rsync`.
@@ -17,28 +19,28 @@ cloud.
 ## Usage
 
 Install using standard Vagrant 1.1+ plugin installation methods. After
-installing, `vagrant up` and specify the `rackspace` provider. An example is
+installing, `vagrant up` and specify the `openstack` provider. An example is
 shown below.
 
 ```
-$ vagrant plugin install vagrant-rackspace
+$ vagrant plugin install vagrant-openstack
 ...
-$ vagrant up --provider=rackspace
+$ vagrant up --provider=openstack
 ...
 ```
 
-Of course prior to doing this, you'll need to obtain an Rackspace-compatible
+Of course prior to doing this, you'll need to obtain an OpenStack-compatible
 box file for Vagrant.
 
 ## Quick Start
 
 After installing the plugin (instructions above), the quickest way to get
-started is to actually use a dummy Rackspace box and specify all the details
+started is to actually use a dummy OpenStack box and specify all the details
 manually within a `config.vm.provider` block. So first, add the dummy
 box using any name you want:
 
 ```
-$ vagrant box add dummy https://github.com/mitchellh/vagrant-rackspace/raw/master/dummy.box
+$ vagrant box add dummy https://github.com/cloudbau/vagrant-openstack/raw/master/dummy.box
 ...
 ```
 
@@ -49,19 +51,22 @@ your information where necessary.
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
 
-  config.vm.provider :rackspace do |rs|
+  config.vm.provider :openstack do |rs|
     rs.username = "YOUR USERNAME"
     rs.api_key  = "YOUR API KEY"
-    rs.flavor   = /512MB/
+    rs.flavor   = /m1.tiny/
     rs.image    = /Ubuntu/
+    rs.endpoint = "KEYSTONE AUTH URL"
+    rs.keypair_name = "YOUR KEYPAIR NAME"
+    rs.ssh_username = "SSH USERNAME"
   end
 end
 ```
 
-And then run `vagrant up --provider=rackspace`.
+And then run `vagrant up --provider=openstack`.
 
-This will start an Ubuntu 12.04 instance in the DFW datacenter region within
-your account. And assuming your SSH information was filled in properly
+This will start a tiny Ubuntu instance in your OpenStack installation within
+your tenant. And assuming your SSH information was filled in properly
 within your Vagrantfile, SSH and provisioning will work as well.
 
 Note that normally a lot of this boilerplate is encoded within the box
@@ -71,8 +76,8 @@ no preconfigured defaults.
 ## Box Format
 
 Every provider in Vagrant must introduce a custom box format. This
-provider introduces `rackspace` boxes. You can view an example box in
-the [example_box/ directory](https://github.com/mitchellh/vagrant-rackspace/tree/master/example_box).
+provider introduces `openstack` boxes. You can view an example box in
+the [example_box/ directory](https://github.com/cloudbau/vagrant-openstack/tree/master/example_box).
 That directory also contains instructions on how to build a box.
 
 The box format is basically just the required `metadata.json` file
@@ -83,21 +88,20 @@ provider-specific configuration for this provider.
 
 This provider exposes quite a few provider-specific configuration options:
 
-* `api_key` - The API key for accessing Rackspace.
+* `api_key` - The API key for accessing OpenStack.
 * `flavor` - The server flavor to boot. This can be a string matching
   the exact ID or name of the server, or this can be a regular expression
   to partially match some server flavor.
 * `image` - The server image to boot. This can be a string matching the
   exact ID or name of the image, or this can be a regular expression to
   partially match some image.
-* `endpoint` - The endpoint to hit. By default this is DFW.
-* `public_key_path` - The path to a public key to initialize with the remote
-  server. This should be the matching pair for the private key configured
-  with `config.ssh.private_key_path` on Vagrant.
-* `server_name` - The name of the server within RackSpace Cloud. This
+* `endpoint` - The keystone authentication URL of your OpenStack installation.
+* `server_name` - The name of the server within the OpenStack Cloud. This
   defaults to the name of the Vagrant machine (via `config.vm.define`), but
   can be overridden with this.
-* `username` - The username with which to access Rackspace.
+* `username` - The username with which to access OpenStack.
+* `keypair_name` - The name of the keypair to access the machine.
+* `ssh_username` - The username to access the machine.
 
 These can be set like typical provider-specific configuration:
 
@@ -105,7 +109,7 @@ These can be set like typical provider-specific configuration:
 Vagrant.configure("2") do |config|
   # ... other stuff
 
-  config.vm.provider :rackspace do |rs|
+  config.vm.provider :openstack do |rs|
     rs.username = "mitchellh"
     rs.api_key  = "foobarbaz"
   end
@@ -115,9 +119,9 @@ end
 ## Networks
 
 Networking features in the form of `config.vm.network` are not
-supported with `vagrant-rackspace`, currently. If any of these are
+supported with `vagrant-openstack`, currently. If any of these are
 specified, Vagrant will emit a warning, but will otherwise boot
-the Rackspace server.
+the OpenStack server.
 
 ## Synced Folders
 
@@ -131,7 +135,7 @@ chef, and puppet) to work!
 
 ## Development
 
-To work on the `vagrant-rackspace` plugin, clone this repository out, and use
+To work on the `vagrant-openstack` plugin, clone this repository out, and use
 [Bundler](http://gembundler.com) to get the dependencies:
 
 ```
@@ -150,5 +154,5 @@ creating a `Vagrantfile` in the top level of this directory (it is gitignored)
 that uses it, and uses bundler to execute Vagrant:
 
 ```
-$ bundle exec vagrant up --provider=rackspace
+$ bundle exec vagrant up --provider=openstack
 ```

@@ -29,11 +29,14 @@ module VagrantPlugins
             return nil
           end
 
+          config = machine.provider_config
+
           # Read the DNS info
           return {
-            :host => server.ipv4_address,
+            # Usually there should only be one public IP
+            :host => server.addresses['public'].last['addr'],
             :port => 22,
-            :username => "root"
+            :username => config.ssh_username
           }
         end
       end

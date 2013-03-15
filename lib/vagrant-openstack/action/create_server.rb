@@ -26,19 +26,11 @@ module VagrantPlugins
 
           # Find the image
           env[:ui].info(I18n.t("vagrant_openstack.finding_image"))
-          image = find_matching(env[:openstack_compute].images.all, config.image)
+          image = find_matching(env[:openstack_compute].images, config.image)
           raise Errors::NoMatchingImage if !image
 
           # Figure out the name for the server
           server_name = config.server_name || env[:machine].name
-
-          # If we're using the default keypair, then show a warning
-          default_key_path = Vagrant.source_root.join("keys/vagrant.pub").to_s
-          public_key_path  = File.expand_path(config.public_key_path, env[:root_path])
-
-          if default_key_path == public_key_path
-            env[:ui].warn(I18n.t("vagrant_openstack.warn_insecure_ssh"))
-          end
 
           # Output the settings we're going to use to the user
           env[:ui].info(I18n.t("vagrant_openstack.launching_server"))
@@ -48,15 +40,10 @@ module VagrantPlugins
 
           # Build the options for launching...
           options = {
-            :flavor_id   => flavor.id,
-            :image_id    => image.id,
+            :flavor_ref  => flavor.id,
+            :image_ref   => image.id,
             :name        => server_name,
-            :personality => [
-              {
-                :path     => "/root/.ssh/authorized_keys",
-                :contents => Base64.encode64(File.read(public_key_path))
-              }
-            ]
+            :key_name    => config.keypair_name
           }
 
           # Create the server
@@ -67,7 +54,7 @@ module VagrantPlugins
 
           # Wait for the server to finish building
           env[:ui].info(I18n.t("vagrant_openstack.waiting_for_build"))
-          retryable(:on => Fog::Errors::TimeoutError, :tries => 200) do
+          retryable(:on => Timeout::Error, :tries => 200) do
             # If we're interrupted don't worry about waiting
             next if env[:interrupted]
 
@@ -93,9 +80,12 @@ module VagrantPlugins
             # Wait for SSH to become available
             env[:ui].info(I18n.t("vagrant_openstack.waiting_for_ssh"))
             while true
-              # If we're interrupted then just back out
-              break if env[:interrupted]
-              break if env[:machine].communicate.ready?
+              begin
+                # If we're interrupted then just back out
+                break if env[:interrupted]
+                break if env[:machine].communicate.ready?
+              rescue Errno::ENETUNREACH
+              end
               sleep 2
             end
 

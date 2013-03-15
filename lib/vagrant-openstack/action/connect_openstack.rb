@@ -23,10 +23,9 @@ module VagrantPlugins
           @logger.info("Connecting to OpenStack...")
           env[:openstack_compute] = Fog::Compute.new({
             :provider => :openstack,
-            :version  => :v2,
+            :openstack_username => username,
             :openstack_api_key => api_key,
-            :openstack_auth_uri => endpoint,
-            :openstack_username => username
+            :openstack_auth_url => endpoint
           })
 
           @app.call(env)

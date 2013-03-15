@@ -12,11 +12,12 @@ describe VagrantPlugins::OpenStack::Config do
 
     its(:api_key)  { should be_nil }
     its(:endpoint) { should be_nil }
-    its(:flavor)   { should eq(/512MB/) }
-    its(:image)    { should eq(/Ubuntu/) }
-    its(:public_key_path) { should eql(vagrant_public_key) }
+    its(:flavor)   { should eq(/m1.tiny/) }
+    its(:image)    { should eq(/cirros/) }
     its(:server_name) { should be_nil }
     its(:username) { should be_nil }
+    its(:keypair_name) { should be_nil }
+    its(:ssh_username) { should be_nil }
   end
 
   describe "overriding defaults" do
@@ -24,9 +25,10 @@ describe VagrantPlugins::OpenStack::Config do
       :endpoint,
       :flavor,
       :image,
-      :public_key_path,
       :server_name,
-      :username].each do |attribute|
+      :username,
+      :keypair_name,
+      :ssh_username].each do |attribute|
       it "should not default #{attribute} if overridden" do
         subject.send("#{attribute}=".to_sym, "foo")
         subject.finalize!

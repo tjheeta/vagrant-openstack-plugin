@@ -22,12 +22,6 @@ module VagrantPlugins
       # expression to partially match a name.
       attr_accessor :image
 
-      # The path to the public key to set up on the remote server for SSH.
-      # This should match the private key configured with `config.ssh.private_key_path`.
-      #
-      # @return [String]
-      attr_accessor :public_key_path
-
       # The name of the server. This defaults to the name of the machine
       # defined by Vagrant (via `config.vm.define`), but can be overriden
       # here.
@@ -37,28 +31,43 @@ module VagrantPlugins
       #
       # @return [String]
       attr_accessor :username
+      
+      # The name of the keypair to use.
+      #
+      # @return [String]
+      attr_accessor :keypair_name
+
+      # The SSH username to use with this OpenStack instance. This overrides
+      # the `config.ssh.username` variable.
+      #
+      # @return [String]
+      attr_accessor :ssh_username
 
       def initialize
         @api_key  = UNSET_VALUE
         @endpoint = UNSET_VALUE
         @flavor   = UNSET_VALUE
         @image    = UNSET_VALUE
-        @public_key_path = UNSET_VALUE
         @server_name = UNSET_VALUE
         @username = UNSET_VALUE
+        @keypair_name = UNSET_VALUE
+        @ssh_username = UNSET_VALUE
       end
 
       def finalize!
         @api_key  = nil if @api_key == UNSET_VALUE
         @endpoint = nil if @endpoint == UNSET_VALUE
-        @flavor   = /512MB/ if @flavor == UNSET_VALUE
-        @image    = /Ubuntu/ if @image == UNSET_VALUE
+        @flavor   = /m1.tiny/ if @flavor == UNSET_VALUE
+        @image    = /cirros/ if @image == UNSET_VALUE
         @server_name = nil if @server_name == UNSET_VALUE
         @username = nil if @username == UNSET_VALUE
 
-        if @public_key_path == UNSET_VALUE
-          @public_key_path = Vagrant.source_root.join("keys/vagrant.pub")
-        end
+        # Keypair defaults to nil
+        @keypair_name = nil if @keypair_name == UNSET_VALUE
+        
+        # The SSH values by default are nil, and the top-level config
+        # `config.ssh` values are used.
+        @ssh_username = nil if @ssh_username == UNSET_VALUE
       end
 
       def validate(machine)
@@ -66,12 +75,7 @@ module VagrantPlugins
 
         errors << I18n.t("vagrant_openstack.config.api_key_required") if !@api_key
         errors << I18n.t("vagrant_openstack.config.username_required") if !@username
-
-        public_key_path = File.expand_path(@public_key_path, machine.env.root_path)
-        if !File.file?(public_key_path)
-          errors << I18n.t("vagrant_openstack.config.public_key_not_found")
-        end
-
+        
         { "OpenStack Provider" => errors }
       end
     end
