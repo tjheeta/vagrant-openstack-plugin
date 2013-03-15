@@ -1,14 +1,14 @@
 require "vagrant"
 
 module VagrantPlugins
-  module Rackspace
+  module OpenStack
     class Config < Vagrant.plugin("2", :config)
-      # The API key to access RackSpace.
+      # The API key to access OpenStack.
       #
       # @return [String]
       attr_accessor :api_key
 
-      # The endpoint to access RackSpace. If nil, it will default
+      # The endpoint to access OpenStack. If nil, it will default
       # to DFW.
       #
       # @return [String]
@@ -33,7 +33,7 @@ module VagrantPlugins
       # here.
       attr_accessor :server_name
 
-      # The username to access RackSpace.
+      # The username to access OpenStack.
       #
       # @return [String]
       attr_accessor :username
@@ -64,15 +64,15 @@ module VagrantPlugins
       def validate(machine)
         errors = []
 
-        errors << I18n.t("vagrant_rackspace.config.api_key_required") if !@api_key
-        errors << I18n.t("vagrant_rackspace.config.username_required") if !@username
+        errors << I18n.t("vagrant_openstack.config.api_key_required") if !@api_key
+        errors << I18n.t("vagrant_openstack.config.username_required") if !@username
 
         public_key_path = File.expand_path(@public_key_path, machine.env.root_path)
         if !File.file?(public_key_path)
-          errors << I18n.t("vagrant_rackspace.config.public_key_not_found")
+          errors << I18n.t("vagrant_openstack.config.public_key_not_found")
         end
 
-        { "RackSpace Provider" => errors }
+        { "OpenStack Provider" => errors }
       end
     end
   end

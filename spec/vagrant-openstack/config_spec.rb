@@ -1,6 +1,6 @@
-require "vagrant-rackspace/config"
+require "vagrant-openstack/config"
 
-describe VagrantPlugins::Rackspace::Config do
+describe VagrantPlugins::OpenStack::Config do
   describe "defaults" do
     let(:vagrant_public_key) { Vagrant.source_root.join("keys/vagrant.pub") }
 

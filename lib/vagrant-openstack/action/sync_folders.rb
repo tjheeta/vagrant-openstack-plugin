@@ -3,14 +3,14 @@ require "log4r"
 require "vagrant/util/subprocess"
 
 module VagrantPlugins
-  module Rackspace
+  module OpenStack
     module Action
       # This middleware uses `rsync` to sync the folders over to the
       # remote instance.
       class SyncFolders
         def initialize(app, env)
           @app    = app
-          @logger = Log4r::Logger.new("vagrant_rackspace::action::sync_folders")
+          @logger = Log4r::Logger.new("vagrant_openstack::action::sync_folders")
         end
 
         def call(env)
@@ -26,7 +26,7 @@ module VagrantPlugins
             # avoid creating an additional directory with rsync
             hostpath = "#{hostpath}/" if hostpath !~ /\/$/
 
-            env[:ui].info(I18n.t("vagrant_rackspace.rsync_folder",
+            env[:ui].info(I18n.t("vagrant_openstack.rsync_folder",
                                 :hostpath => hostpath,
                                 :guestpath => guestpath))
 

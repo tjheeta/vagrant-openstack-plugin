@@ -1,13 +1,13 @@
 module VagrantPlugins
-  module Rackspace
+  module OpenStack
     module Action
-      class MessageAlreadyCreated
+      class IsCreated
         def initialize(app, env)
           @app = app
         end
 
         def call(env)
-          env[:ui].info(I18n.t("vagrant_rackspace.already_created"))
+          env[:result] = env[:machine].state.id != :not_created
           @app.call(env)
         end
       end

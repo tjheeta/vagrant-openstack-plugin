@@ -4,15 +4,15 @@ require "log4r"
 require 'vagrant/util/retryable'
 
 module VagrantPlugins
-  module Rackspace
+  module OpenStack
     module Action
-      # This creates the Rackspace server.
+      # This creates the OpenStack server.
       class CreateServer
         include Vagrant::Util::Retryable
 
         def initialize(app, env)
           @app    = app
-          @logger = Log4r::Logger.new("vagrant_rackspace::action::create_server")
+          @logger = Log4r::Logger.new("vagrant_openstack::action::create_server")
         end
 
         def call(env)
@@ -20,13 +20,13 @@ module VagrantPlugins
           config   = env[:machine].provider_config
 
           # Find the flavor
-          env[:ui].info(I18n.t("vagrant_rackspace.finding_flavor"))
-          flavor = find_matching(env[:rackspace_compute].flavors.all, config.flavor)
+          env[:ui].info(I18n.t("vagrant_openstack.finding_flavor"))
+          flavor = find_matching(env[:openstack_compute].flavors.all, config.flavor)
           raise Errors::NoMatchingFlavor if !flavor
 
           # Find the image
-          env[:ui].info(I18n.t("vagrant_rackspace.finding_image"))
-          image = find_matching(env[:rackspace_compute].images.all, config.image)
+          env[:ui].info(I18n.t("vagrant_openstack.finding_image"))
+          image = find_matching(env[:openstack_compute].images.all, config.image)
           raise Errors::NoMatchingImage if !image
 
           # Figure out the name for the server
@@ -37,11 +37,11 @@ module VagrantPlugins
           public_key_path  = File.expand_path(config.public_key_path, env[:root_path])
 
           if default_key_path == public_key_path
-            env[:ui].warn(I18n.t("vagrant_rackspace.warn_insecure_ssh"))
+            env[:ui].warn(I18n.t("vagrant_openstack.warn_insecure_ssh"))
           end
 
           # Output the settings we're going to use to the user
-          env[:ui].info(I18n.t("vagrant_rackspace.launching_server"))
+          env[:ui].info(I18n.t("vagrant_openstack.launching_server"))
           env[:ui].info(" -- Flavor: #{flavor.name}")
           env[:ui].info(" -- Image: #{image.name}")
           env[:ui].info(" -- Name: #{server_name}")
@@ -60,13 +60,13 @@ module VagrantPlugins
           }
 
           # Create the server
-          server = env[:rackspace_compute].servers.create(options)
+          server = env[:openstack_compute].servers.create(options)
 
           # Store the ID right away so we can track it
           env[:machine].id = server.id
 
           # Wait for the server to finish building
-          env[:ui].info(I18n.t("vagrant_rackspace.waiting_for_build"))
+          env[:ui].info(I18n.t("vagrant_openstack.waiting_for_build"))
           retryable(:on => Fog::Errors::TimeoutError, :tries => 200) do
             # If we're interrupted don't worry about waiting
             next if env[:interrupted]
@@ -91,7 +91,7 @@ module VagrantPlugins
             env[:ui].clear_line
 
             # Wait for SSH to become available
-            env[:ui].info(I18n.t("vagrant_rackspace.waiting_for_ssh"))
+            env[:ui].info(I18n.t("vagrant_openstack.waiting_for_ssh"))
             while true
               # If we're interrupted then just back out
               break if env[:interrupted]
@@ -99,7 +99,7 @@ module VagrantPlugins
               sleep 2
             end
 
-            env[:ui].info(I18n.t("vagrant_rackspace.ready"))
+            env[:ui].info(I18n.t("vagrant_openstack.ready"))
           end
 
           @app.call(env)

@@ -1,5 +1,5 @@
 module VagrantPlugins
-  module Rackspace
+  module OpenStack
     module Action
       class WarnNetworks
         def initialize(app, env)
@@ -8,7 +8,7 @@ module VagrantPlugins
 
         def call(env)
           if env[:machine].config.vm.networks.length > 0
-            env[:ui].warn(I18n.t("vagrant_rackspace.warn_networks"))
+            env[:ui].warn(I18n.t("vagrant_openstack.warn_networks"))
           end
 
           @app.call(env)
