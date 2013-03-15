@@ -126,7 +126,7 @@ the OpenStack server.
 ## Synced Folders
 
 There is minimal support for synced folders. Upon `vagrant up`,
-`vagrant reload`, and `vagrant provision`, the Rackspace provider will use
+`vagrant reload`, and `vagrant provision`, the OpenStack provider will use
 `rsync` (if available) to uni-directionally sync the folder to
 the remote machine over SSH.
 
