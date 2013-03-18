@@ -53,14 +53,14 @@ require 'vagrant-openstack'
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
 
-  config.vm.provider :openstack do |rs|
-    rs.username = "YOUR USERNAME"
-    rs.api_key  = "YOUR API KEY"
-    rs.flavor   = /m1.tiny/
-    rs.image    = /Ubuntu/
-    rs.endpoint = "KEYSTONE AUTH URL"
-    rs.keypair_name = "YOUR KEYPAIR NAME"
-    rs.ssh_username = "SSH USERNAME"
+  config.vm.provider :openstack do |os|    # e.g.
+    os.username = "YOUR USERNAME"          # "#{ENV['OS_USERNAME']}"
+    os.api_key  = "YOUR API KEY"           # "#{ENV['OS_PASSWORD']}" 
+    os.flavor   = /m1.tiny/
+    os.image    = /Ubuntu/
+    os.endpoint = "KEYSTONE AUTH URL"      # "#{ENV['OS_AUTH_URL']}/tokens"  
+    os.keypair_name = "YOUR KEYPAIR NAME"
+    os.ssh_username = "SSH USERNAME"
   end
 end
 ```
