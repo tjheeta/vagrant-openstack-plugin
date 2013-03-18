@@ -48,6 +48,8 @@ And then make a Vagrantfile that looks like the following, filling in
 your information where necessary.
 
 ```
+require 'vagrant-openstack'
+
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"
 
