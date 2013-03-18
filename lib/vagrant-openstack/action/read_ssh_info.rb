@@ -31,10 +31,11 @@ module VagrantPlugins
 
           config = machine.provider_config
 
+          host = server.addresses['public'].last['addr'] rescue nil
           # Read the DNS info
           return {
             # Usually there should only be one public IP
-            :host => server.addresses['public'].last['addr'],
+            :host => host,
             :port => 22,
             :username => config.ssh_username
           }
