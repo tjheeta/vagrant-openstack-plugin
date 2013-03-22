@@ -43,6 +43,12 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :ssh_username
 
+      # User data to be sent to the newly created OpenStack instance. Use this
+      # e.g. to inject a script at boot time.
+      #
+      # @return [String]
+      attr_accessor :user_data
+
       def initialize
         @api_key  = UNSET_VALUE
         @endpoint = UNSET_VALUE
@@ -52,6 +58,7 @@ module VagrantPlugins
         @username = UNSET_VALUE
         @keypair_name = UNSET_VALUE
         @ssh_username = UNSET_VALUE
+        @user_data = UNSET_VALUE
       end
 
       def finalize!
@@ -68,6 +75,8 @@ module VagrantPlugins
         # The SSH values by default are nil, and the top-level config
         # `config.ssh` values are used.
         @ssh_username = nil if @ssh_username == UNSET_VALUE
+        
+        @user_data = "" if @user_data == UNSET_VALUE
       end
 
       def validate(machine)

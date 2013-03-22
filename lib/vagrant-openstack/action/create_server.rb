@@ -43,7 +43,8 @@ module VagrantPlugins
             :flavor_ref  => flavor.id,
             :image_ref   => image.id,
             :name        => server_name,
-            :key_name    => config.keypair_name
+            :key_name    => config.keypair_name,
+            :user_data_encoded => Base64.encode64(config.user_data)
           }
 
           # Create the server
