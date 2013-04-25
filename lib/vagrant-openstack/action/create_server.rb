@@ -55,7 +55,7 @@ module VagrantPlugins
 
           # Wait for the server to finish building
           env[:ui].info(I18n.t("vagrant_openstack.waiting_for_build"))
-          retryable(:on => Timeout::Error, :tries => 200) do
+          retryable(:on => Fog::Errors::TimeoutError, :tries => 200) do
             # If we're interrupted don't worry about waiting
             next if env[:interrupted]
 
