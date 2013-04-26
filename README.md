@@ -23,7 +23,7 @@ installing, `vagrant up` and specify the `openstack` provider. An example is
 shown below.
 
 ```
-$ vagrant plugin install vagrant-openstack
+$ vagrant plugin install vagrant-openstack-plugin
 ...
 $ vagrant up --provider=openstack
 ...
@@ -48,7 +48,7 @@ And then make a Vagrantfile that looks like the following, filling in
 your information where necessary.
 
 ```
-require 'vagrant-openstack'
+require 'vagrant-openstack-plugin'
 
 Vagrant.configure("2") do |config|
   config.vm.box = "dummy"

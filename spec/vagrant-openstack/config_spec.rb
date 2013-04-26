@@ -1,4 +1,4 @@
-require "vagrant-openstack/config"
+require "vagrant-openstack-plugin/config"
 
 describe VagrantPlugins::OpenStack::Config do
   describe "defaults" do

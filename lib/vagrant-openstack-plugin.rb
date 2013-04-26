@@ -1,6 +1,6 @@
 require "pathname"
 
-require "vagrant-openstack/plugin"
+require "vagrant-openstack-plugin/plugin"
 
 module VagrantPlugins
   module OpenStack
