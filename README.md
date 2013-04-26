@@ -40,7 +40,7 @@ manually within a `config.vm.provider` block. So first, add the dummy
 box using any name you want:
 
 ```
-$ vagrant box add dummy https://github.com/cloudbau/vagrant-openstack/raw/master/dummy.box
+$ vagrant box add dummy https://github.com/cloudbau/vagrant-openstack-plugin/raw/master/dummy.box
 ...
 ```
 
@@ -79,7 +79,7 @@ no preconfigured defaults.
 
 Every provider in Vagrant must introduce a custom box format. This
 provider introduces `openstack` boxes. You can view an example box in
-the [example_box/ directory](https://github.com/cloudbau/vagrant-openstack/tree/master/example_box).
+the [example_box/ directory](https://github.com/cloudbau/vagrant-openstack-plugin/tree/master/example_box).
 That directory also contains instructions on how to build a box.
 
 The box format is basically just the required `metadata.json` file
@@ -121,7 +121,7 @@ end
 ## Networks
 
 Networking features in the form of `config.vm.network` are not
-supported with `vagrant-openstack`, currently. If any of these are
+supported with `vagrant-openstack-plugin`, currently. If any of these are
 specified, Vagrant will emit a warning, but will otherwise boot
 the OpenStack server.
 
@@ -137,7 +137,7 @@ chef, and puppet) to work!
 
 ## Development
 
-To work on the `vagrant-openstack` plugin, clone this repository out, and use
+To work on the `vagrant-openstack-plugin` plugin, clone this repository out, and use
 [Bundler](http://gembundler.com) to get the dependencies:
 
 ```
