@@ -101,7 +101,7 @@ module VagrantPlugins
         @metadata = nil if @metadata == UNSET_VALUE
         @username = nil if @username == UNSET_VALUE
         @network = nil if @network == UNSET_VALUE
-        @address_id = nil if @address_id == UNSET_VALUE
+        @address_id = 'public' if @address_id == UNSET_VALUE
 
         # Keypair defaults to nil
         @keypair_name = nil if @keypair_name == UNSET_VALUE
