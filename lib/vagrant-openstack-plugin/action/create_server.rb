@@ -107,7 +107,7 @@ module VagrantPlugins
                 # If we're interrupted then just back out
                 break if env[:interrupted]
                 break if env[:machine].communicate.ready?
-              rescue Errno::ENETUNREACH
+              rescue Errno::ENETUNREACH, Errno::EHOSTUNREACH
               end
               sleep 2
             end
