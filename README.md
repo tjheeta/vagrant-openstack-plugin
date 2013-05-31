@@ -72,7 +72,7 @@ Vagrant.configure("2") do |config|
     }                                      # Optional
     os.security_groups = ['ssh', 'http']   # Optional
     os.tenant = "YOUR TENANT_NAME"         # Optional
-
+    os.floating_ip = "33.33.33.33"         # Optional (The floating IP to assign for this instance)
   end
 end
 ```
