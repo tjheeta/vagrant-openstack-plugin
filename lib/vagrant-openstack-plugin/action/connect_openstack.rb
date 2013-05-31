@@ -35,7 +35,8 @@ module VagrantPlugins
               :provider => :openstack,
               :openstack_username => username,
               :openstack_api_key => api_key,
-              :openstack_auth_url => endpoint
+              :openstack_auth_url => endpoint,
+              :openstack_tenant => tenant
             })
           end
 
