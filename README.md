@@ -56,24 +56,26 @@ Vagrant.configure("2") do |config|
   # Make sure the private key from the key pair is provided
   config.ssh.private_key_path = "~/.ssh/id_rsa"
 
-  config.vm.provider :openstack do |os|    # e.g.
-    os.username = "YOUR USERNAME"          # "#{ENV['OS_USERNAME']}"
-    os.api_key  = "YOUR API KEY"           # "#{ENV['OS_PASSWORD']}" 
-    os.flavor   = /m1.tiny/
-    os.image    = /Ubuntu/
-    os.endpoint = "KEYSTONE AUTH URL"      # "#{ENV['OS_AUTH_URL']}/tokens"  
-    os.keypair_name = "YOUR KEYPAIR NAME"
-    os.ssh_username = "SSH USERNAME"
-    os.metadata = {"key" => "value"}       # Optional
-    os.network = "YOUR NETWORK_NAME"       # Optional
-    os.address_id = "YOUR ADDRESS ID"      # Optional (`network` above has higher precedence)
-    os.scheduler_hints = {
+  config.vm.provider :openstack do |os|
+    os.username     = "YOUR USERNAME"          # e.g. "#{ENV['OS_USERNAME']}"
+    os.api_key      = "YOUR API KEY"           # e.g. "#{ENV['OS_PASSWORD']}" 
+    os.flavor       = /m1.tiny/                # Regex or String
+    os.image        = /Ubuntu/                 # Regex or String
+    os.endpoint     = "KEYSTONE AUTH URL"      # e.g. "#{ENV['OS_AUTH_URL']}/tokens"  
+    os.keypair_name = "YOUR KEYPAIR NAME"      # as stored in Nova
+    os.ssh_username = "SSH USERNAME"           # login for the VM
+
+    os.metadata  = {"key" => "value"}                      # optional
+    os.user_data = "#cloud-config\nmanage_etc_hosts: True" # optional
+    os.network            = "YOUR NETWORK_NAME"            # optional
+    os.address_id         = "YOUR ADDRESS ID"              # optional (`network` above has higher precedence)
+    os.scheduler_hints    = {
         :cell => 'australia'
-    }                                      # Optional
-    os.availability_zone = "az0001"        # Optional
-    os.security_groups = ['ssh', 'http']   # Optional
-    os.tenant = "YOUR TENANT_NAME"         # Optional
-    os.floating_ip = "33.33.33.33"         # Optional (The floating IP to assign for this instance)
+    }                                          # optional
+    os.availability_zone  = "az0001"           # optional
+    os.security_groups    = ['ssh', 'http']    # optional
+    os.tenant             = "YOUR TENANT_NAME" # optional
+    os.floating_ip        = "33.33.33.33"      # optional (The floating IP to assign for this instance)
   end
 end
 ```
