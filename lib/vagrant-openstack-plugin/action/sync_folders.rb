@@ -19,6 +19,13 @@ module VagrantPlugins
           ssh_info = env[:machine].ssh_info
 
           env[:machine].config.vm.synced_folders.each do |id, data|
+
+            # ignore disabled shared folders
+            if data[:disabled]
+              @logger.info "Not syncing disabled folder: #{data[:hostpath]} => #{data[:guestpath]}"
+              next
+            end
+
             hostpath  = File.expand_path(data[:hostpath], env[:root_path])
             guestpath = data[:guestpath]
 
