@@ -133,7 +133,7 @@ This provider exposes quite a few provider-specific configuration options:
 * `security_groups` - List of security groups to be applied to the machine.
 * `tenant` - Tenant name.  You only need to specify this if your OpenStack user has access to multiple tenants.
 * `region` - Region Name. Specify the region you want the instance to be launched in for multi-region environments.
-
+* `proxy` - HTTP proxy. When behind a firewall override this value for API access.
 
 These can be set like typical provider-specific configuration:
 

@@ -22,9 +22,15 @@ module VagrantPlugins
           tenant = config.tenant
           region = config.region
 
+          # Pass proxy config down into the Fog::Connection object using
+          # the `connection_options` hash.
+          connection_options = { :proxy => config.proxy }
+
           @logger.info("Connecting to OpenStack...")
+          @logger.debug("API connection params: #{connection_options.inspect}")
           env[:openstack_compute] = Fog::Compute.new({
             :provider => :openstack,
+            :connection_options => connection_options,
             :openstack_username => username,
             :openstack_api_key => api_key,
             :openstack_auth_url => endpoint,
@@ -35,6 +41,7 @@ module VagrantPlugins
           if config.network
             env[:openstack_network] = Fog::Network.new({
               :provider => :openstack,
+              :connection_options => connection_options,
               :openstack_username => username,
               :openstack_api_key => api_key,
               :openstack_auth_url => endpoint,

@@ -91,6 +91,11 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :region
 
+      # The proxy to specify when making connection to OpenStack API.
+      #
+      # @return [String]
+      attr_accessor :proxy
+
       def initialize
         @api_key  = UNSET_VALUE
         @endpoint = UNSET_VALUE
@@ -110,6 +115,7 @@ module VagrantPlugins
         @user_data = UNSET_VALUE
         @floating_ip = UNSET_VALUE
         @region = UNSET_VALUE
+        @proxy = UNSET_VALUE
       end
 
       def finalize!
@@ -139,6 +145,7 @@ module VagrantPlugins
         @floating_ip = nil if @floating_ip == UNSET_VALUE
 
         @region = nil if @region == UNSET_VALUE
+        @proxy = nil if @proxy == UNSET_VALUE
       end
 
       def validate(machine)
