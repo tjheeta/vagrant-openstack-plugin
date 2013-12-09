@@ -43,12 +43,25 @@ module VagrantPlugins
               "chown #{ssh_info[:username]} '#{guestpath}'")
 
             # Rsync over to the guest path using the SSH info
+            if env[:machine].config.ssh.proxy_command
+              proxy_cmd = "-o ProxyCommand='#{env[:machine].config.ssh.proxy_command}'"
+            else
+              proxy_cmd = ''
+            end
+
+            # poor workaround for poor ipv6 handling of rsync
+            if ssh_info[:host].include? ':'
+              user_at_host = "[#{ssh_info[:username]}@#{ssh_info[:host]}]"
+            else
+              user_at_host = ssh_info[:username] + "@" + ssh_info[:host]
+            end
+
             command = [
               "rsync", "--verbose", "--archive", "-z", "--delete",
               "--exclude", ".vagrant/",
-              "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no -i '#{ssh_info[:private_key_path]}'",
+              "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no #{proxy_cmd} -i '#{ssh_info[:private_key_path]}'",
               hostpath,
-              "#{ssh_info[:username]}@#{ssh_info[:host]}:#{guestpath}"]
+              user_at_host + ":" + guestpath]
 
             r = Vagrant::Util::Subprocess.execute(*command)
             if r.exit_code != 0
