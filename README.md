@@ -126,6 +126,7 @@ This provider exposes quite a few provider-specific configuration options:
 * `network` - A name or id that will be used to fetch network configuration
   data when configuring the instance. NOTE: This is not compliant with the
   vagrant network configurations.
+* `networks` - An array of names or ids to create a server with multiple network interfaces. This overrides the `network` setting.
 * `address_id` - A specific address identifier to use when connecting to the
   instance. `network` has higher precedence.
 * `scheduler_hints` - Pass hints to the open stack scheduler, see `--hint` flag in [OpenStack filters doc](http://docs.openstack.org/trunk/openstack-compute/admin/content/scheduler-filters.html)
