@@ -38,7 +38,7 @@ module VagrantPlugins
             :openstack_region => region
           })
 
-          if config.network
+          if config.network || config.networks
             env[:openstack_network] = Fog::Network.new({
               :provider => :openstack,
               :connection_options => connection_options,

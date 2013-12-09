@@ -68,6 +68,7 @@ Vagrant.configure("2") do |config|
     os.metadata  = {"key" => "value"}                      # optional
     os.user_data = "#cloud-config\nmanage_etc_hosts: True" # optional
     os.network            = "YOUR NETWORK_NAME"            # optional
+    os.networks           = [ "internal", "external" ]     # optional, overrides os.network
     os.address_id         = "YOUR ADDRESS ID"              # optional (`network` above has higher precedence)
     os.scheduler_hints    = {
         :cell => 'australia'

@@ -42,6 +42,9 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :network
 
+      # @return [Array]
+      attr_accessor :networks
+
       # A specific address identifier to use when connecting.
       # Overrides `network` above if both are set.
       #
@@ -106,6 +109,7 @@ module VagrantPlugins
         @username = UNSET_VALUE
         @keypair_name = UNSET_VALUE
         @network  = UNSET_VALUE
+        @networks  = UNSET_VALUE
         @address_id  = UNSET_VALUE
         @scheduler_hints = UNSET_VALUE
         @availability_zone = UNSET_VALUE
@@ -127,6 +131,7 @@ module VagrantPlugins
         @metadata = nil if @metadata == UNSET_VALUE
         @username = nil if @username == UNSET_VALUE
         @network = nil if @network == UNSET_VALUE
+        @networks = nil if @networks == UNSET_VALUE
         @address_id = 'public' if @address_id == UNSET_VALUE
 
         # Keypair defaults to nil

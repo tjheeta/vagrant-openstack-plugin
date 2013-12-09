@@ -45,11 +45,20 @@ module VagrantPlugins
             :availability_zone => config.availability_zone
           }
           
-          # Find a network if provided
-          if config.network
+          # Fallback to only one network, otherwise `config.networks` overrides
+          if config.network and not config.networks
+            config.networks = [ config.network ]
+          end
+
+          # Find networks if provided
+          if config.networks
             env[:ui].info(I18n.t("vagrant_openstack.finding_network"))
-            network = find_matching(env[:openstack_network].networks, config.network)
-            options[:nics] = [{"net_id" => network.id}] if network
+            options[:nics] = Array.new
+            config.networks.each do |net|
+              network = find_matching(env[:openstack_network].networks, net)
+              options[:nics] << {"net_id" => network.id} if network
+            end
+            env[:ui].info("options[:nics]: #{options[:nics]}")
           end
           
           # Output the settings we're going to use to the user
@@ -57,8 +66,8 @@ module VagrantPlugins
           env[:ui].info(" -- Flavor: #{flavor.name}")
           env[:ui].info(" -- Image: #{image.name}")
           env[:ui].info(" -- Name: #{server_name}")
-          if network
-            env[:ui].info(" -- Network: #{network.name}")
+          config.networks.each do |n|
+            env[:ui].info(" -- Network: #{n}")
           end
           if config.security_groups
             env[:ui].info(" -- Security Groups: #{config.security_groups}")
