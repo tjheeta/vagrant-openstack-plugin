@@ -40,6 +40,7 @@ module VagrantPlugins
             :key_name    => config.keypair_name,
             :metadata    => config.metadata,
             :user_data   => config.user_data,
+            :config_drive => config.config_drive,
             :security_groups => config.security_groups,
             :os_scheduler_hints => config.scheduler_hints,
             :availability_zone => config.availability_zone
@@ -66,6 +67,7 @@ module VagrantPlugins
           env[:ui].info(" -- Flavor: #{flavor.name}")
           env[:ui].info(" -- Image: #{image.name}")
           env[:ui].info(" -- Name: #{server_name}")
+          env[:ui].info(" -- Config Drive: #{config.config_drive}")
           config.networks.each do |n|
             env[:ui].info(" -- Network: #{n}")
           end

@@ -78,6 +78,11 @@ module VagrantPlugins
       # @return [String]
       attr_accessor :tenant
 
+      # Use config drive.  Use `true` or UUID of an image.
+      #
+      # @return [String]
+      attr_accessor :config_drive
+
       # User data to be sent to the newly created OpenStack instance. Use this
       # e.g. to inject a script at boot time.
       #
@@ -117,6 +122,7 @@ module VagrantPlugins
         @ssh_username = UNSET_VALUE
         @tenant = UNSET_VALUE
         @user_data = UNSET_VALUE
+        @config_drive = UNSET_VALUE
         @floating_ip = UNSET_VALUE
         @region = UNSET_VALUE
         @proxy = UNSET_VALUE
@@ -146,6 +152,7 @@ module VagrantPlugins
         @ssh_username = nil if @ssh_username == UNSET_VALUE
 
         @tenant = nil if @tenant == UNSET_VALUE
+        @config_drive = false if @config_drive == UNSET_VALUE
         @user_data = "" if @user_data == UNSET_VALUE
         @floating_ip = nil if @floating_ip == UNSET_VALUE
 
