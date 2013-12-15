@@ -56,10 +56,14 @@ module VagrantPlugins
               user_at_host = ssh_info[:username] + "@" + ssh_info[:host]
             end
 
+            # Since Vagrant 1.4 this may be an array
+            ssh_key_paths = ssh_info[:private_key_path].is_a?(Array) ? ssh_info[:private_key_path] : [ ssh_info[:private_key_path] ]
+            ssh_keys = ssh_key_paths.map {|p| "-i '#{p}'"}.join(" ")
+ 
             command = [
               "rsync", "--verbose", "--archive", "-z", "--delete",
               "--exclude", ".vagrant/",
-              "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no #{proxy_cmd} -i '#{ssh_info[:private_key_path]}'",
+              "-e", "ssh -p #{ssh_info[:port]} -o StrictHostKeyChecking=no #{proxy_cmd} #{ssh_keys}",
               hostpath,
               user_at_host + ":" + guestpath]
 
