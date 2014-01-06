@@ -46,8 +46,12 @@ module VagrantPlugins
           }
           
           # Fallback to only one network, otherwise `config.networks` overrides
-          if config.network and not config.networks
-            config.networks = [ config.network ]
+          unless config.networks
+            if config.network
+              config.networks = [ config.network ]
+            else
+              config.networks = []
+            end
           end
 
           # Find networks if provided
