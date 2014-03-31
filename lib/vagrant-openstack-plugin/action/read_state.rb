@@ -18,10 +18,11 @@ module VagrantPlugins
         end
 
         def read_state(openstack, machine)
-          return :not_created if machine.id.nil?
+            id = machine.id || openstack.servers.all( :name => machine.name ).first.id rescue nil
+          return :not_created if id.nil?
 
           # Find the machine
-          server = openstack.servers.get(machine.id)
+          server = openstack.servers.get(id)
           if server.nil? || server.state == "DELETED"
             # The machine can't be found
             @logger.info("Machine not found or deleted, assuming it got destroyed.")
