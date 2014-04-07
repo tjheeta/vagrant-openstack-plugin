@@ -18,10 +18,9 @@ module VagrantPlugins
         end
 
         def read_ssh_info(openstack, machine)
-          return nil if machine.id.nil?
-
-          # Find the machine
-          server = openstack.servers.get(machine.id)
+            id = machine.id || openstack.servers.all( :name => machine.name ).first.id rescue nil
+          return nil if id.nil?
+          server = openstack.servers.get(id)
           if server.nil?
             # The machine can't be found
             @logger.info("Machine couldn't be found, assuming it got destroyed.")
