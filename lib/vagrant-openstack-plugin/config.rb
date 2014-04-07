@@ -62,6 +62,12 @@ module VagrantPlugins
       # @return [Array[String]]
       attr_accessor :security_groups
 
+      # Hash representing the security groups rules to apply.
+      # e.g. ['ssh', 'http']
+      #
+      # @return [Hash]
+      attr_accessor :security_group_rules
+
       # The SSH username to use with this OpenStack instance. This overrides
       # the `config.ssh.username` variable.
       #
