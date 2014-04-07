@@ -69,26 +69,6 @@ module VagrantPlugins
           @app.call(env)
         end
 
-        def read_state(openstack, machine)
-            tmp = openstack.list_security_groups
-            item = tmp.data[:body]['security_groups'].select { |v| v['name'] =~ /tjtest/ }
-            puts item
-
-            id = machine.id || openstack.servers.all( :name => machine.name ).first.id rescue nil
-          return :not_created if id.nil?
-
-          # Find the machine
-          server = openstack.servers.get(id)
-          if server.nil? || server.state == "DELETED"
-            # The machine can't be found
-            @logger.info("Machine not found or deleted, assuming it got destroyed.")
-            machine.id = nil
-            return :not_created
-          end
-
-          # Return the state
-          return server.state.downcase.to_sym
-        end
       end
     end
   end
