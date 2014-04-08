@@ -35,18 +35,18 @@ module VagrantPlugins
           security_group_rules.each do |rule| 
               secgroup = current_security_groups.data[:body]['security_groups'].select { |v| v['name'] == rule[:name] }.first
               # The rules may reference other groups to allow access to instead of cidr
-              secgroup_src_ids = []
-              if rule[:secgroup_src]
-                  rule[:secgroup_src].each do |s|
+              remote_group_ids = []
+              if rule[:remote_groups]
+                  rule[:remote_groups].each do |s|
                       puts s
                       tmp=current_security_groups.data[:body]['security_groups'].select { |v| v['name'] == s }.first
-                      secgroup_src_ids.push(tmp["id"])
+                      remote_group_ids.push(tmp["id"])
                   end
               else
-                  secgroup_src_ids.push(nil)
+                  remote_group_ids.push(nil)
               end
               # Should only rescue 409 errors, conflict
-              secgroup_src_ids.each do |secgroup_src|
+              remote_group_ids.each do |remote_group_id|
                   begin
                       pp network.create_security_group_rule(
                       secgroup["id"],
@@ -55,7 +55,7 @@ module VagrantPlugins
                       :port_range_max => rule[:port_range_max],
                       :protocol => rule[:protocol],
                       :remote_ip_prefix => rule[:remote_ip_prefix] ? rule[:remote_ip_prefix] : nil,
-                      :remote_group_id => secgroup_src ? secgroup_src : nil
+                      :remote_group_id => remote_group_id ? remote_group_id : nil
                       ) 
                   rescue Excon::Errors::Conflict
                       pp "Rule already made:"
