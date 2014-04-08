@@ -18,7 +18,7 @@ module VagrantPlugins
         end
 
         def read_state(openstack, machine)
-            id = machine.id || openstack.servers.all( :name => machine.name ).first.id rescue nil
+          id = machine.id || openstack.servers.all( :name => machine.name ).first.id rescue nil
           return :not_created if id.nil?
 
           # Find the machine
