@@ -54,7 +54,7 @@ module VagrantPlugins
               # Should only rescue 409 errors, conflict
               remote_group_ids.each do |remote_group_id|
                   begin
-                      pp network.create_security_group_rule(
+                      network.create_security_group_rule(
                       secgroup["id"],
                       "ingress",
                       :port_range_min => rule["port_range_min"],
