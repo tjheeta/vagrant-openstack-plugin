@@ -36,9 +36,9 @@ module VagrantPlugins
           end
 
           if config.network
-            host = server.addresses[config.network].last['addr'] rescue nil
+            host = server.addresses[config.network].first['addr'] rescue nil
           else
-            host = server.addresses[config.address_id].last['addr'] rescue nil
+            host = server.addresses[config.address_id].first['addr'] rescue nil
           end
 
           # If host is still nil, try to find the IP address another way
