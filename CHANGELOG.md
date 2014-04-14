@@ -1,5 +1,9 @@
 # Changelog for vagrant-openstack-plugin
 
+## 0.3.1 (April 14, 2014)
+- Adds the ability to create security groups
+- Allows vagrant status to query the openstack api to determine what is up
+
 ## 0.3.0 (September 25, 2013)
 
 - Adds support to determine IP address to use
