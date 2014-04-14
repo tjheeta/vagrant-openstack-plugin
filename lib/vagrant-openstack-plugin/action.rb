@@ -85,6 +85,7 @@ module VagrantPlugins
             end
 
             b2.use ConnectOpenStack
+            b2.use CreateSecurityGroups
             b2.use Provision
             b2.use SyncFolders
             b2.use SetHostname
@@ -112,6 +113,7 @@ module VagrantPlugins
       # The autoload farm
       action_root = Pathname.new(File.expand_path("../action", __FILE__))
       autoload :ConnectOpenStack, action_root.join("connect_openstack")
+      autoload :CreateSecurityGroups, action_root.join("create_security_groups")
       autoload :CreateServer, action_root.join("create_server")
       autoload :DeleteServer, action_root.join("delete_server")
       autoload :IsCreated, action_root.join("is_created")
